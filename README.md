@@ -1,13 +1,13 @@
 # 专业阶段 - rCore-Tutorial
 
-基于 [LearningOS 2026s rCore 课程模板](https://github.com/LearningOS/2026s-oscamp-professional-2026s-rcore-rCore-Tutorial-Code) 整理，由 [2026f-autotest](https://github.com/2026f-autotest) 统一分配学员仓库、自动评测并同步 OpenCamp。
+基于 [LearningOS 2026s rCore 课程模板](https://github.com/LearningOS/2026s-oscamp-professional-2026s-rcore-rCore-Tutorial-Code) 整理，由 [LearningOS](https://github.com/LearningOS) 统一分配学员仓库、自动评测并同步 OpenCamp。
 
 **五项实验：每项 100 分 · 总分：500 分**
 
 ## 开始实验
 
 1. 加入 [OpenCamp 秋冬季训练营](https://opencamp.cn/os2edu/camp/2026fall)，并绑定自己的 GitHub 账号。
-2. 点击[领取作业仓库](https://github.com/2026f-autotest/enroll/issues/new?template=rcore.yml)，点击 **Create** 提交申请；等待机器人回复，然后接受仓库邀请。
+2. 点击[领取作业仓库](https://github.com/LearningOS/2026a-enroll/issues/new?template=rcore.yml)，点击 **Create** 提交申请；等待机器人回复，然后接受仓库邀请。
 3. 克隆分配的作业仓库，切换章节分支，完成实验代码和报告。
 4. push 到 `ch3`、`ch4`、`ch5`、`ch6` 或 `ch8`，在 Actions 查看评测；通过后自动上传累计成绩。
 
@@ -43,4 +43,4 @@ Actions 先执行 **Test chapter and reports**，通过后执行 **Save progress
 
 - [学员指南](docs/STUDENT_GUIDE.md)
 
-本仓库由 2026f-autotest 组织维护，保留上游源码历史，按 [GPL-3.0](LICENSE) 许可分发。
+本仓库由 LearningOS 组织维护，保留上游源码历史，按 [GPL-3.0](LICENSE) 许可分发。

@@ -13,7 +13,7 @@ from github_api import api, redact
 from provision import ORGANIZATION, provision
 
 COURSE_ID = "2073"
-COURSE = {"title": "专业阶段 - rCore-Tutorial", "template": "2026f-rcore", "secret": "ARCEOS_2026_SPRING_TOKEN", "branches": ["main", "ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7", "ch8"]}
+COURSE = {"title": "专业阶段 - rCore-Tutorial", "template": "2026a-rcore", "secret": "OSCAMP_2026A_RCORE_TOKEN", "branches": ["main", "ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7", "ch8"]}
 
 
 def read_students(arguments, path):
