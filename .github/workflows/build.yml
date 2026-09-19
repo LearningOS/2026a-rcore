@@ -1,4 +1,4 @@
-name: rCore 2026f grading
+name: rCore 2026a grading
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
     if: >-
       !startsWith(github.event.repository.name, 'preparing-') &&
       contains(fromJSON('["ch3","ch4","ch5","ch6","ch8"]'), github.ref_name) &&
-      (github.repository == '2026f-autotest/2026f-rcore' || vars.STUDENT_GITHUB != '')
+      (github.repository == 'LearningOS/2026a-rcore' || vars.STUDENT_GITHUB != '')
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     container:
@@ -50,7 +50,7 @@ jobs:
     # The template only tests. Each student repository has a maintainer-set login.
     if: >-
       !startsWith(github.event.repository.name, 'preparing-') &&
-      github.repository_owner == '2026f-autotest' &&
+      github.repository_owner == 'LearningOS' &&
       vars.STUDENT_GITHUB != '' &&
       github.actor == vars.STUDENT_GITHUB
     runs-on: ubuntu-24.04
@@ -65,7 +65,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Save passed chapter and upload cumulative score
         env:
-          ARCEOS_2026_SPRING_TOKEN: ${{ secrets.ARCEOS_2026_SPRING_TOKEN }}
+          OSCAMP_2026A_RCORE_TOKEN: ${{ secrets.OSCAMP_2026A_RCORE_TOKEN }}
           STUDENT_GITHUB: ${{ vars.STUDENT_GITHUB }}
           GRADE_POINTS: ${{ needs.basic-test.outputs.points }}
         run: python3 -u .github/scripts/rcore_publish.py
