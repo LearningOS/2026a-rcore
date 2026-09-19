@@ -1,27 +1,27 @@
 # 专业阶段 - rCore-Tutorial：领取仓库到自动评测
 
-本课程的作业仓库由 `2026f-autotest` 组织分配。
+本课程的作业仓库由 `LearningOS` 组织分配。
 
 ## 1. 绑定账号并接受邀请
 
 加入 [OpenCamp 秋冬季训练营](https://opencamp.cn/os2edu/camp/2026fall)，并绑定自己实际使用的 GitHub 账号。
 
-点击[领取作业仓库](https://github.com/2026f-autotest/enroll/issues/new?template=rcore.yml)，点击 **Create** 提交申请。系统直接读取申请人的 GitHub 登录名，不需要手填账号。等待机器人回复，打开邀请链接并接受仓库协作邀请。
+点击[领取作业仓库](https://github.com/LearningOS/2026a-enroll/issues/new?template=rcore.yml)，点击 **Create** 提交申请。系统直接读取申请人的 GitHub 登录名，不需要手填账号。等待机器人回复，打开邀请链接并接受仓库协作邀请。
 
-分配的仓库为 `2026f-autotest/2026f-rcore-你的GitHub登录名`，包含 `main` 与 `ch1` 至 `ch8`。课程模板 `2026f-autotest/2026f-rcore` 不用于提交个人作业。
+分配的仓库为 `LearningOS/2026a-rcore-你的GitHub登录名`，包含 `main` 与 `ch1` 至 `ch8`。课程模板 `LearningOS/2026a-rcore` 不用于提交个人作业。
 
 ## 2. 克隆分配的仓库
 
 本地需要 Git 和课程实验环境。下列命令使用 SSH；请先把自己的 SSH 公钥配置到 GitHub 账号，把 `YOUR_GITHUB_LOGIN` 替换成自己的登录名。
 
 ```sh
-git clone git@github.com:2026f-autotest/2026f-rcore-YOUR_GITHUB_LOGIN.git
+git clone git@github.com:LearningOS/2026a-rcore-YOUR_GITHUB_LOGIN.git
 ```
 
 克隆分配的组织仓库，Git 使用自己的 SSH 身份认证。
 
 ```sh
-cd 2026f-rcore-YOUR_GITHUB_LOGIN
+cd 2026a-rcore-YOUR_GITHUB_LOGIN
 ```
 
 进入刚克隆的仓库。
