@@ -22,16 +22,16 @@ publish = load("rcore_publish")
 class GradingTests(unittest.TestCase):
     def test_organization_student_mapping(self):
         self.assertEqual(publish.student_login(
-            "2026f-autotest/2026f-rcore-Alayfolk64", "2026f-autotest",
+            "LearningOS/2026a-rcore-Alayfolk64", "LearningOS",
             "alayfolk64", "Alayfolk64"), "Alayfolk64")
 
     def test_reject_unassigned_template_wrong_student_and_personal_fork(self):
         cases = [
-            ("2026f-autotest/2026f-rcore", "2026f-autotest", "Alayfolk64", ""),
-            ("2026f-autotest/2026f-rcore", "2026f-autotest", "Alayfolk64", "Alayfolk64"),
-            ("2026f-autotest/2026f-rcore-Alayfolk64", "2026f-autotest", "teacher", "Alayfolk64"),
-            ("2026f-autotest/2026f-rcore-Alayfolk64", "2026f-autotest", "other", "other"),
-            ("Alayfolk64/2026f-rcore-Alayfolk64", "Alayfolk64", "Alayfolk64", "Alayfolk64"),
+            ("LearningOS/2026a-rcore", "LearningOS", "Alayfolk64", ""),
+            ("LearningOS/2026a-rcore", "LearningOS", "Alayfolk64", "Alayfolk64"),
+            ("LearningOS/2026a-rcore-Alayfolk64", "LearningOS", "teacher", "Alayfolk64"),
+            ("LearningOS/2026a-rcore-Alayfolk64", "LearningOS", "other", "other"),
+            ("Alayfolk64/2026a-rcore-Alayfolk64", "Alayfolk64", "Alayfolk64", "Alayfolk64"),
         ]
         for case in cases:
             with self.subTest(case=case), self.assertRaises(ValueError):
