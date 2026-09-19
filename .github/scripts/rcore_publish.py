@@ -14,15 +14,15 @@ CHAPTERS = ("ch3", "ch4", "ch5", "ch6", "ch8")
 COURSE_ID = 2073
 TOTAL_SCORE = 500
 API_URL = "https://api.opencamp.cn/web/api/courseRank/createByThirdToken"
-ORGANIZATION = "2026f-autotest"
+ORGANIZATION = "LearningOS"
 
 
 def student_login(repository, owner, actor, student):
     """Bind a course repository to its assigned student, including on retries."""
     if not re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?", student):
         raise ValueError("STUDENT_GITHUB must be the student's GitHub login.")
-    expected = f"{ORGANIZATION}/2026f-rcore-{student}"
-    if owner.lower() != ORGANIZATION or repository.lower() != expected.lower():
+    expected = f"{ORGANIZATION}/2026a-rcore-{student}"
+    if owner.lower() != ORGANIZATION.lower() or repository.lower() != expected.lower():
         raise ValueError("Repository does not match the assigned course student.")
     if actor.lower() != student.lower():
         raise ValueError("Only the assigned student's runs can upload their score.")
@@ -102,9 +102,9 @@ def save_state(rank, state_path, state, message):
 
 
 def main():
-    token = os.environ.get("ARCEOS_2026_SPRING_TOKEN", "")
+    token = os.environ.get("OSCAMP_2026A_RCORE_TOKEN", "")
     if not token:
-        sys.exit("ARCEOS_2026_SPRING_TOKEN is missing. Ask the maintainer to authorize this repository in the organization secret.")
+        sys.exit("OSCAMP_2026A_RCORE_TOKEN is missing. Ask the maintainer to authorize this repository in the organization secret.")
     if os.environ.get("OSCAMP_COURSE_ID") != str(COURSE_ID):
         sys.exit("Unexpected course ID; nothing was uploaded.")
     repository = os.environ["GITHUB_REPOSITORY"]

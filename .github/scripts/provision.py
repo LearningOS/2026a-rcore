@@ -3,7 +3,7 @@
 import time
 from github_api import GitHubError, REQUEST_BUDGET, REQUEST_TIMEOUT, api
 
-ORGANIZATION = "2026f-autotest"
+ORGANIZATION = "LearningOS"
 CONFIGURATION_TIMEOUT = 600
 POLL_INTERVAL = 10
 
@@ -148,7 +148,7 @@ def provision(login, course_id, course):
     if not set(course["branches"]).issubset({item["name"] for item in branches}):
         raise ValueError("Course template is missing required branches; no repository was created.")
     secret = api("GET", f"orgs/{ORGANIZATION}/actions/secrets/{course['secret']}")
-    if secret.get("visibility") != "all":
+    if secret.get("visibility") not in {"all", "selected"}:
         raise ValueError("The course organization secret must allow public repositories.")
 
     final_repository = template + "-" + login
@@ -179,6 +179,10 @@ def provision(login, course_id, course):
             variable = api("GET", variable_path)
     if variable["value"].lower() != login.lower():
         raise ValueError("Repository belongs to another student; identity was not overwritten.")
+
+    # Grant only this course credential before checking the student repository.
+    if secret["visibility"] == "selected":
+        api("PUT", f"orgs/{ORGANIZATION}/actions/secrets/{course['secret']}/repositories/{repo['id']}")
 
     api("PUT", endpoint + "/actions/workflows/check-config.yml/enable")
     check_url = check_configuration(repository)
