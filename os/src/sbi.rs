@@ -7,7 +7,7 @@ use core::arch::asm;
 const SBI_SET_TIMER: usize = 0;
 const SBI_CONSOLE_PUTCHAR: usize = 1;
 const SBI_CONSOLE_GETCHAR: usize = 2;
-const SBI_SHUTDOWN: usize = 8;
+const SBI_SYSTEM_RESET: usize = 0x53525354;
 
 /// general sbi call
 #[inline(always)]
@@ -38,11 +38,26 @@ pub fn console_putchar(c: usize) {
 
 /// use sbi call to getchar from console (qemu uart handler)
 pub fn console_getchar() -> usize {
-    sbi_call(SBI_CONSOLE_GETCHAR, 0, 0, 0)
+    let ch = sbi_call(SBI_CONSOLE_GETCHAR, 0, 0, 0);
+    // Legacy SBI returns -1 when no input is available; readers expect zero.
+    if ch == usize::MAX {
+        0
+    } else {
+        ch
+    }
 }
 
 /// use sbi call to shutdown the kernel
 pub fn shutdown() -> ! {
-    sbi_call(SBI_SHUTDOWN, 0, 0, 0);
+    // SBI System Reset: shutdown (type 0), no failure reason (reason 0).
+    unsafe {
+        asm!(
+            "ecall",
+            in("a7") SBI_SYSTEM_RESET,
+            in("a6") 0,
+            inlateout("a0") 0usize => _,
+            inlateout("a1") 0usize => _,
+        );
+    }
     panic!("It should shutdown!");
 }
