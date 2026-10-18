@@ -50,7 +50,7 @@ RUN qemu-system-riscv64 --version && \
 ENV RUSTUP_HOME=/usr/local/rustup \
     CARGO_HOME=/usr/local/cargo \
     PATH=/usr/local/cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
-    RUST_VERSION=nightly
+    RUST_VERSION=nightly-2024-05-02
 
 # Install Rust
 RUN set -eux; \
@@ -65,11 +65,9 @@ RUN rustup --version && \
     cargo --version && \
     rustc --version
 
-ARG RUST_VERSION=nightly-2025-09-18
-
 # Install Rust components and tools for rCore development
 RUN rustup default $RUST_VERSION; \
-    cargo install cargo-binutils; \
+    cargo install cargo-binutils --version 0.4.0 --locked; \
     rustup target add riscv64gc-unknown-none-elf; \
     rustup component add rust-src; \
     rustup component add llvm-tools-preview; \
