@@ -42,6 +42,22 @@ git switch ch3
 
 按照 [实验指导第零章](https://learningos.github.io/rCore-Tutorial-Guide/0setup-devel-env.html) 准备 Linux、Rust 和 QEMU。章节中的 `rust-toolchain.toml` 指定课程使用的 Rust 版本；本仓库使用 `nightly-2024-05-02`，目标为 `riscv64gc-unknown-none-elf`。
 
+### 固定工具版本与 RustSBI
+
+`ch1` 至 `ch8` 使用以下版本，避免本地环境与课程构建要求不一致：
+
+| 组件 | 版本 |
+| --- | --- |
+| 内核与用户程序的 Rust 工具链 | `nightly-2024-05-02` |
+| `cargo-binutils` | `0.4.0` |
+| 随仓库提供的 RustSBI 固件 | `0.4.1` |
+
+各章节的 `bootloader/rustsbi-qemu.bin` 是已构建的 RustSBI jump 固件，供 QEMU 启动位于 `0x80200000` 的内核，日常实验不需要重新构建固件。来源、构建工具链与 SHA-256 记录在 `bootloader/rustsbi-qemu.toml`；对应依赖锁文件和许可证一并保存在 `bootloader/`。固件自身的构建工具链与上表中的课程内核工具链不同，以该配置文件为准。
+
+`ch3` 至 `ch8` 已同步 SBI System Reset 关机接口适配。不要用旧版本固件替换课程提供的文件；使用旧 Docker 镜像时，需按下面的步骤重新构建镜像，才能使用固定后的构建环境。
+
+### 运行章节代码
+
 在已切换到 `ch3` 的作业仓库根目录，首次下载用户程序：
 
 ```sh
