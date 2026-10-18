@@ -35,7 +35,7 @@ build: env $(KERNEL_BIN)
 env:
 ifeq ($(OFFLINE),)
 	(rustup target list | grep "riscv64gc-unknown-none-elf (installed)") || rustup target add $(TARGET)
-	cargo install cargo-binutils --locked
+	cargo install cargo-binutils --version 0.4.0 --locked
 	rustup component add rust-src
 	rustup component add llvm-tools-preview
 endif
