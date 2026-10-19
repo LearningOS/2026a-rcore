@@ -22,14 +22,27 @@ jobs:
       (github.repository == 'LearningOS/2026a-rcore' || vars.STUDENT_GITHUB != '')
     runs-on: ubuntu-24.04
     timeout-minutes: 25
-    container:
-      image: alicesama/rcore-ci@sha256:6e5706f0cfb8e5d3cf705d6c1069b42865e6ca11c5945a38588d58c2bad903e4 # 2024a
     outputs:
       points: ${{ steps.grade.outputs.points }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
+      - name: Prepare QEMU 8.2 and the course Rust toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-system-misc
+          python3 - <<'PY'
+          import subprocess
+          version = subprocess.check_output(['qemu-system-riscv64', '--version'], text=True)
+          print(version, end='')
+          if not version.startswith('QEMU emulator version 8.2.'):
+              raise SystemExit('This course requires QEMU 8.2.x.')
+          PY
+          rustup toolchain install nightly-2024-05-02 --profile minimal \
+            --component rust-src,llvm-tools-preview \
+            --target riscv64gc-unknown-none-elf
+          cargo +nightly-2024-05-02 install cargo-binutils --version 0.4.0 --locked
       - name: Run official rCore checker
         id: grade
         run: python3 -u .github/scripts/rcore_grade.py
