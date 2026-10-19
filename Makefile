@@ -1,5 +1,5 @@
-CONTAINER_NAME ?= rcore-container
-DOCKER_NAME ?= rcore-docker
+CONTAINER_NAME ?= rcore-container-qemu8
+DOCKER_NAME ?= rcore-docker-qemu8
 .PHONY: docker build_docker attach_docker rebuild_docker fmt
 
 docker:
