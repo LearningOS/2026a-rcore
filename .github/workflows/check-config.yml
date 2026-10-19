@@ -13,7 +13,8 @@ jobs:
     if: >-
       github.repository_owner == 'LearningOS' &&
       github.event.repository.name != '2026a-rcore' &&
-      (github.event_name == 'workflow_dispatch' || vars.STUDENT_GITHUB != '')
+      (github.event_name == 'workflow_dispatch' ||
+       (!startsWith(github.event.repository.name, 'preparing-') && vars.STUDENT_GITHUB != ''))
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
