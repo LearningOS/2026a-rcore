@@ -63,10 +63,9 @@ git switch ch3
 
 ```sh
 git clone https://github.com/LearningOS/rCore-Tutorial-Test.git user
-git -C user checkout a0593662ad55d670ba8c27ce1763347cd0dd552f
 ```
 
-两条命令下载用户程序并选择与课程自动评测相同的版本。已经有 `user/` 时复用该目录，不要重复克隆。
+这条命令下载用户程序。已经有 `user/` 时复用该目录，不要重复克隆。
 
 ```sh
 make -C os run
