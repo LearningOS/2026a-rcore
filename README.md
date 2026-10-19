@@ -50,6 +50,7 @@ git switch ch3
 | --- | --- |
 | 内核与用户程序的 Rust 工具链 | `nightly-2024-05-02` |
 | `cargo-binutils` | `0.4.0` |
+| QEMU | `8.2.x`（Docker 与 GitHub 评测使用 `8.2.2`） |
 | 随仓库提供的 RustSBI 固件 | `0.4.1` |
 
 各章节的 `bootloader/rustsbi-qemu.bin` 是已构建的 RustSBI jump 固件，供 QEMU 启动位于 `0x80200000` 的内核，日常实验不需要重新构建固件。来源、构建工具链与 SHA-256 记录在 `bootloader/rustsbi-qemu.toml`；对应依赖锁文件和许可证一并保存在 `bootloader/`。固件自身的构建工具链与上表中的课程内核工具链不同，以该配置文件为准。
@@ -83,7 +84,9 @@ make build_docker
 make docker
 ```
 
-先从仓库的 Dockerfile 构建环境，再进入挂载了本地仓库的容器。容器内工作目录为 `/mnt`，可运行上面的 `make -C os run`。首次构建包含编译 QEMU，耗时较长。
+先从仓库的 Dockerfile 构建环境，再进入挂载了本地仓库的容器。容器内工作目录为 `/mnt`，可运行上面的 `make -C os run`。环境使用 QEMU 8.2.2 和 `nightly-2024-05-02`，首次构建会下载 QEMU 和 Rust 工具链。
+
+新版默认镜像名为 `rcore-docker-qemu8`，容器名为 `rcore-container-qemu8`，不会复用或删除旧的 QEMU 7 容器。旧容器内未放在挂载目录中的文件，请自行保留。
 
 网络配置参考 Docker 官方的[镜像下载代理](https://docs.docker.com/reference/cli/docker/image/pull/#proxy-configuration)和[构建代理](https://docs.docker.com/engine/cli/proxy/#build-with-a-proxy-configuration)。
 
