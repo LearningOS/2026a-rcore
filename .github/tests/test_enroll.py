@@ -19,35 +19,36 @@ class EnrollmentTests(unittest.TestCase):
             with self.subTest(login=login), self.assertRaises(ValueError):
                 enroll.read_students([login], None)
 
-    def test_owner_fallback_uses_canonical_identity_and_verified_provisioner(self):
-        answers = [{"state": "active", "role": "admin"}, {"type": "User", "login": "Student"}]
-        with patch.object(sys, "argv", ["enroll.py", "student"]), \
-                patch.object(enroll.subprocess, "run"), \
-                patch.object(enroll.shutil, "which", return_value="gh"), \
-                patch.object(enroll, "api", side_effect=answers), \
-                patch.object(enroll, "provision", return_value=("https://github.com/ready", "https://github.com/check")) as provision:
+    def test_roster_skips_comments_and_duplicate_logins(self):
+        with patch.object(Path, "read_text", return_value="\n# class\nAlice # lab 1\nalice\nBob\n"):
+            self.assertEqual(enroll.read_students([], Path("students.txt")), ["Alice", "Bob"])
+
+    def test_owner_submits_canonical_id_and_waits_for_exact_run(self):
+        import json
+        from subprocess import CompletedProcess
+
+        user = {"type": "User", "login": "Student", "id": 42}
+        dispatched = CompletedProcess([], 0, stdout='{"workflow_run_id": 123, "html_url": "run"}')
+        with patch.object(sys, "argv", ["enroll.py", "student"]), patch.object(
+                enroll, "github", side_effect=[{"state": "active", "role": "admin"}, user]), patch.object(
+                enroll.subprocess, "run", return_value=dispatched) as run:
             enroll.main()
-        provision.assert_called_once_with("Student", enroll.COURSE_ID, enroll.COURSE)
+        dispatch, watch = run.call_args_list
+        self.assertIn("repos/LearningOS/2026a-enroll/actions/workflows/manual-enroll.yml/dispatches", dispatch.args[0])
+        self.assertEqual(json.loads(dispatch.kwargs["input"])["inputs"],
+                         {"course": enroll.COURSE_ID, "student_id": "42"})
+        self.assertIn("123", watch.args[0])
+        self.assertIn("--exit-status", watch.args[0])
 
-    def test_non_owner_cannot_provision(self):
-        with patch.object(sys, "argv", ["enroll.py", "student"]), \
-                patch.object(enroll.subprocess, "run"), \
-                patch.object(enroll.shutil, "which", return_value="gh"), \
-                patch.object(enroll, "api", return_value={"state": "active", "role": "member"}), \
-                patch.object(enroll, "provision") as provision:
-            with self.assertRaisesRegex(ValueError, "owner"):
-                enroll.main()
-        provision.assert_not_called()
-
-    def test_invalid_roster_user_stops_before_provisioning(self):
-        with patch.object(sys, "argv", ["enroll.py", "student"]), \
-                patch.object(enroll.subprocess, "run"), \
-                patch.object(enroll.shutil, "which", return_value="gh"), \
-                patch.object(enroll, "api", side_effect=[{"state": "active", "role": "admin"}, {"type": "Organization"}]), \
-                patch.object(enroll, "provision") as provision:
-            with self.assertRaisesRegex(ValueError, "personal"):
-                enroll.main()
-        provision.assert_not_called()
+    def test_non_owner_and_invalid_roster_never_dispatch(self):
+        owner = {"state": "active", "role": "admin"}
+        for answers in ([{"state": "active", "role": "member"}],
+                        [owner, {"type": "User", "id": 1}, {"type": "Organization"}]):
+            with patch.object(enroll, "read_students", return_value=["student", "org"]), patch.object(
+                    enroll, "github", side_effect=answers), patch.object(enroll.subprocess, "run") as run:
+                with self.assertRaises(ValueError):
+                    enroll.main()
+                run.assert_not_called()
 
 
 if __name__ == "__main__":
